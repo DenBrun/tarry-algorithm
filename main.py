@@ -1,6 +1,5 @@
 import numpy as np
 from pyvis.network import Network
-import copy
 
 
 class Graph():
@@ -66,18 +65,20 @@ class Graph():
         for i in range(self.n):
             net.add_node(i, label=str(i+1))
 
+        for i in range(len(walk)-1):
+            net.add_edge(walk[i], walk[i+1], color='red')
+
         for i in range(self.n):
             for j in range(i+1, self.n):
                 if self.m[i][j] != 0:
                     net.add_edge(i, j)
 
-        for i in range(len(walk)-1):
-            net.add_edge(walk[i], walk[i+1], color='red')
-
         net.show("graph.html", notebook=False)
 
     def copy(self):
-        return copy.copy(self)
+        g = Graph(self.n)
+        g.m = np.copy(self.m, subok=True)
+        return g
 
 
 def input_graph(n):
